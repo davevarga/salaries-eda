@@ -1,0 +1,74 @@
+# Byte-compiled and cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+.venv/
+
+# PyCharm-specific files
+.idea/
+*.iml
+*.iws
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Compiled Cython files
+*.c
+*.so
+
+# Test coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# Distribution files
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Pipenv and Poetry
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# MyPy and Pylint cache
+.mypy_cache/
+.pylint.d/
+
+# Pytest and nose
+.pytest_cache/
+.tox/
+
+# Docker
+*.dockerignore
+
+# VS Code settings (if used)
+.vscode/
+
+# SQLite database files
+*.sqlite3
+*.db
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+*.secret
+
+# Terraform and cloud-specific files
+.terraform/
+*.tfstate
+*.tfstate.backup
