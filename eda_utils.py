@@ -1,12 +1,25 @@
 import math
-
+from scipy.stats import gaussian_kde
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import pandas as pd
 
 colors = ['skyblue', 'salmon', 'lightgreen', 'gold', 'bisque', 'aquamarine','plum', 'lightpink', 'sandybrown']
 
+# Custom color map: gradient for green (closer to 0) and red (closer to 1)
+colors_gradient = {
+    "red": [(0.0, "white"), (0.5, "lightcoral"), (1.0, "darkred")],
+    "green": [(0.0, "white"), (0.5, "lightgreen"), (1.0, "darkgreen")],
+}
+
+# Combine the two gradients into one custom colormap
+red_green_cmap = LinearSegmentedColormap.from_list(
+    "red_green",
+    [(0, "darkgreen"), (0.5, "white"), (1, "darkred")],
+    N=256
+)
 
 def plot_distribution(dataset, column, bins=20):
     """
@@ -165,3 +178,28 @@ def standard_clean(dataframe, string_columns, map=None):
 
     # Drop NaN values
     return dataframe
+
+
+def calculate_iou(Y_pred, Y_norm):
+    # Compute KDE (Kernel Density Estimate) for Actual and Predicted values
+    kde_actual = gaussian_kde(Y_norm)  # KDE for actual values
+    kde_predicted = gaussian_kde(Y_pred)  # KDE for predicted values
+
+    # Define a common range of x values for integration
+    x_values = np.linspace(min(Y_norm.min(), Y_pred.min()), max(Y_norm.max(), Y_pred.max()), 1000)
+
+    # Evaluate the densities at each x value
+    actual_density = kde_actual(x_values)
+    predicted_density = kde_predicted(x_values)
+
+    # Compute the Intersection (min of the two densities at each point)
+    intersection_density = np.minimum(actual_density, predicted_density)
+    area_intersection = np.trapz(intersection_density, x_values)
+
+    # Compute the Union (sum of the two densities minus their intersection)
+    union_density = np.maximum(actual_density, predicted_density)
+    area_union = np.trapz(union_density, x_values)
+
+    # Intersection over Union (IoU)
+    iou = area_intersection / area_union
+    return iou
